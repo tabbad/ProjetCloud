@@ -1,0 +1,41 @@
+runtime: nodejs20
+env: standard
+
+# Configuration pour le service backend
+service: backend-api
+
+# Point d'entrée de l'application
+entrypoint: node server.js
+
+# Variables d'environnement
+env_variables:
+  NODE_ENV: production
+  PORT: 8080
+  GOOGLE_CLOUD_PROJECT: testcloud-ef721
+
+# Mise à l'échelle automatique
+automatic_scaling:
+  min_instances: 1
+  max_instances: 10
+  target_cpu_utilization: 0.6
+
+# Ressources
+resources:
+  cpu: 1
+  memory_gb: 1
+  disk_size_gb: 10
+
+# Vérification de santé
+readiness_check:
+  path: "/"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+liveness_check:
+  path: "/"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2

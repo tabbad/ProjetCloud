@@ -1,15 +1,35 @@
-# runtime: nodejs20
-
-# handlers:
-#   # Sert tous les fichiers statiques (JS, CSS, images, etc.)
-#   - url: /(.*\.(js|css|png|jpg|jpeg|gif|ico|svg|json|txt|woff2?))$
-#     static_files: build/\1
-#     upload: build/.*
-
-#   # Toutes les autres URL renvoient vers index.html (React Router SPA)
-#   - url: /.*
-#     static_files: build/index.html
-#     upload: build/index.html
 runtime: nodejs20
 env: standard
-entrypoint: node server.js
+
+# Configuration pour le service frontend
+service: default
+
+# Script de build et de démarrage
+env_variables:
+  NODE_ENV: production
+
+# Handlers pour servir l'application React
+handlers:
+  # Servir les fichiers statiques
+  - url: /static
+    static_dir: build/static
+
+  # Servir les assets
+  - url: /(.*\.(js|css|png|jpg|jpeg|gif|ico|svg|json|txt|woff2?|map))$
+    static_files: build/\1
+    upload: build/.*\.(js|css|png|jpg|jpeg|gif|ico|svg|json|txt|woff2?|map)$
+
+  # Servir les fichiers spéciaux
+  - url: /(favicon\.ico|manifest\.json|robots\.txt)$
+    static_files: build/\1
+    upload: build/(favicon\.ico|manifest\.json|robots\.txt)$
+
+  # Toutes les autres routes renvoient vers index.html (pour React Router)
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html
+
+# Mise à l'échelle automatique
+automatic_scaling:
+  min_instances: 1
+  max_instances: 5
