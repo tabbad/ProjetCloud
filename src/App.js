@@ -1,6 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -114,7 +113,7 @@ function App() {
           'Content-Type': 'application/json',
         }
       });
-      const data = await response.json();
+      //const data = await response.json();
       
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
