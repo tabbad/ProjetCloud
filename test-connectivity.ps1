@@ -4,7 +4,7 @@
 Write-Host "=== Test de connectivité Frontend ↔ Backend ===" -ForegroundColor Green
 
 $FRONTEND_URL = "https://projetcloud-476413.ey.r.appspot.com"
-$BACKEND_URL = "http://backendprojetcloud-env.eba-s5fadmwy.eu-west-3.elasticbeanstalk.com"
+$BACKEND_URL = "https://backendprojetcloud-env.eba-s5fadmwy.eu-west-3.elasticbeanstalk.com"
 
 Write-Host "`n1. Test Backend - Route /health" -ForegroundColor Yellow
 try {

@@ -10,7 +10,7 @@ function App() {
 
   // URL de l'API - change automatiquement selon l'environnement
   const API_URL = process.env.NODE_ENV === 'production' 
-    ? 'http://backendprojetcloud-env.eba-s5fadmwy.eu-west-3.elasticbeanstalk.com'
+    ? 'https://backendprojetcloud-env.eba-s5fadmwy.eu-west-3.elasticbeanstalk.com'
     : 'http://localhost:8080';
 
   const callHelloRoute = async () => {
@@ -24,7 +24,7 @@ function App() {
       const data = await response.json();
       setMessage(data.message);
     } catch (err) {
-      setError(`Erreur: ${err.message}`);
+      setError(`Erreur: ${err.message}. Note: Mixed Content Error peut nécessiter HTTPS sur le backend.`);
     } finally {
       setLoading(false);
     }
