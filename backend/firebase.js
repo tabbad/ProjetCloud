@@ -33,7 +33,6 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
-
 // Configuration Firestore
 db.settings({
   ignoreUndefinedProperties: true
