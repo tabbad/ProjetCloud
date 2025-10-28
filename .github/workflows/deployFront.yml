@@ -22,7 +22,13 @@ jobs:
         run: npm ci
 
       - name: Build React app
-        run: npm run build
+        env:
+          REACT_APP_API_URL: http://backendprojetcloud-env.eba-s5fadmwy.eu-west-3.elasticbeanstalk.com
+          REACT_APP_ENV: production
+        run: |
+          echo "Building with API URL: $REACT_APP_API_URL"
+          npm run build
+          echo "Build completed with backend URL: $REACT_APP_API_URL"
 
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2

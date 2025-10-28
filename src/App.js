@@ -10,8 +10,8 @@ function App() {
 
   // URL de l'API - change automatiquement selon l'environnement
   const API_URL = process.env.NODE_ENV === 'production' 
-    ? 'https://backend-api-dot-apptest-474412.lm.r.appspot.com'
-    : 'http://localhost:5000';
+    ? 'http://backendprojetcloud-env.eba-s5fadmwy.eu-west-3.elasticbeanstalk.com'
+    : 'http://localhost:8080';
 
   const callHelloRoute = async () => {
     setLoading(true);
