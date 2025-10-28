@@ -1,4 +1,7 @@
-require('dotenv').config();
+// Configuration dotenv uniquement en développement
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const express = require('express');
 const cors = require('cors');
 const { db } = require('./firebase');
@@ -144,7 +147,17 @@ app.get('/', (req, res) => {
   res.json({
     message: 'Bienvenue sur l\'API Backend avec Firestore',
     version: '1.0.0',
-    endpoints: ['/hello', '/todos', '/todos/:id', '/test-firebase']
+    endpoints: ['/hello', '/todos', '/todos/:id', '/test-firebase', '/health']
+  });
+});
+
+// Route de health check pour Elastic Beanstalk
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'UP',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
@@ -341,6 +354,19 @@ app.listen(PORT, () => {
   console.log(`📡 API disponible sur http://localhost:${PORT}`);
   console.log(`👋 Route /hello disponible sur http://localhost:${PORT}/hello`);
   console.log(`📝 Routes /todos disponibles sur http://localhost:${PORT}/todos`);
+  console.log(`❤️ Health check disponible sur http://localhost:${PORT}/health`);
+  console.log(`🌍 Environnement: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`⏰ Démarrage terminé à: ${new Date().toISOString()}`);
+});
+
+// Gestion des erreurs non capturées
+process.on('uncaughtException', (error) => {
+  console.error('❌ Erreur non capturée:', error);
+  console.error('Stack:', error.stack);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Promesse rejetée non gérée:', promise, 'raison:', reason);
 });
 
 module.exports = app;
