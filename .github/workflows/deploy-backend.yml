@@ -1,11 +1,11 @@
-name: Deploy Backend to AWS Elastic Beanstalk
+name: Deploy Backend to AWS Elastic Beanstalk (Recommended)
 
 on:
   push:
     branches: [ main, master ]
     paths:
       - 'backend/**'
-      - '.github/workflows/**'
+      - '.ebextensions/**'
   workflow_dispatch:
 
 jobs:
@@ -20,26 +20,27 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: backend/package-lock.json
-        
-    - name: Install dependencies
-      run: |
-        cd backend
-        npm ci --production
         
     - name: Create deployment package
       run: |
-        cd backend
-        zip -r ../deploy.zip . -x "node_modules/.cache/*" "*.log"
+        # Créer un dossier de déploiement
+        mkdir eb-deploy
+        
+        # Copier le contenu du backend
+        cp -r backend/* eb-deploy/
+        
+        # Copier les configurations Elastic Beanstalk
+        if [ -d ".ebextensions" ]; then
+          cp -r .ebextensions eb-deploy/
+        fi
+        
+        # Installer les dépendances de production
+        cd eb-deploy
+        npm install --only=production
+        
+        # Créer le package ZIP
+        zip -r ../backend-deployment.zip . -x "*.git*" "node_modules/.cache/*" "*.log"
         cd ..
-        # Ajouter les fichiers de configuration EB
-        cp -r .ebextensions deploy-temp/
-        cp Dockerfile deploy-temp/ || true
-        cd deploy-temp
-        zip -r ../deploy.zip .
-        cd ..
-        rm -rf deploy-temp
         
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -56,6 +57,11 @@ jobs:
         application_name: ${{ secrets.EB_APPLICATION_NAME }}
         environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
         region: ${{ secrets.AWS_REGION }}
-        version_label: ${{ github.sha }}
-        deployment_package: deploy.zip
+        version_label: "v${{ github.run_number }}-${{ github.sha }}"
+        deployment_package: backend-deployment.zip
         wait_for_environment_recovery: 300
+        
+    - name: Cleanup
+      run: |
+        rm -rf eb-deploy
+        rm -f backend-deployment.zip
