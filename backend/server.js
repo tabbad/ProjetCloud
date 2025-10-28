@@ -5,7 +5,7 @@ const { db } = require('./firebase');
 const s3Service = require('./s3service');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080; // Elastic Beanstalk utilise le port 8080 par défaut
 
 
 // Configuration CORS pour la production et le développement
