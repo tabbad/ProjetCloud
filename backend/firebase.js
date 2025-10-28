@@ -32,6 +32,7 @@ if (!admin.apps.length) {
   app = admin.app();
 }
 
+
 const db = admin.firestore();
 // Configuration Firestore
 db.settings({
