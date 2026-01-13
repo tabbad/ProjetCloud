@@ -34,10 +34,17 @@ jobs:
         with:
           project_id: ${{ env.PROJECT_ID }}
 
+      - name: Build backend container image with Cloud Build
+        run: |
+          IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/$SERVICE:latest"
+          echo "Building image: $IMAGE"
+          gcloud builds submit --tag "$IMAGE" .
+
       - name: Deploy backend to Cloud Run
         run: |
+          IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/$SERVICE:latest"
           gcloud run deploy "$SERVICE" \
-            --source ./backend \
+            --image "$IMAGE" \
             --region "$REGION" \
             --platform managed \
             --allow-unauthenticated \
