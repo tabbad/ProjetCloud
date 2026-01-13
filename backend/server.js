@@ -16,15 +16,19 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Permettre les requêtes sans origin (comme Postman, mobile apps, etc.)
     if (!origin) return callback(null, true);
-    
-    const allowedOrigins = process.env.NODE_ENV === 'production' 
-      ? [
-          'https://projetcloud-476413.ey.r.appspot.com',
-          'https://projetcloud-476413.appspot.com',
-          'https://backend-api-349217030551.europe-west1.run.app'
-        ]
-      : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8080'];
-    
+
+    const allowedOrigins = [
+      // Frontend App Engine
+      'https://projetcloud-476413.ey.r.appspot.com',
+      'https://projetcloud-476413.appspot.com',
+      // Backend Cloud Run (utile pour certains outils)
+      'https://backend-api-349217030551.europe-west1.run.app',
+      // Dev local
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:8080'
+    ];
+
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
