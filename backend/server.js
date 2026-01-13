@@ -21,7 +21,7 @@ const corsOptions = {
       ? [
           'https://projetcloud-476413.ey.r.appspot.com',
           'https://projetcloud-476413.appspot.com',
-          'http://backendprojetcloud-env.eba-s5fadmwy.eu-west-3.elasticbeanstalk.com'
+          'https://backend-api-349217030551.europe-west1.run.app'
         ]
       : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8080'];
     
