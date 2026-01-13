@@ -163,7 +163,7 @@ function App() {
               borderRadius: '3px',
               cursor: 'pointer'
             }}
-          >tests3</button>
+          >TEST</button>
         <h1>Todo App avec Firestore</h1>
         
         {/* Section Hello */}
