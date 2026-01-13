@@ -18,6 +18,7 @@ jobs:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       REGION: ${{ secrets.CLOUD_RUN_REGION }}
       SERVICE: ${{ secrets.CLOUD_RUN_SERVICE }}
+      CLOUDSDK_CORE_DISABLE_PROMPTS: '1'
 
     steps:
       - name: Checkout code
@@ -39,5 +40,6 @@ jobs:
             --source ./backend \
             --region "$REGION" \
             --platform managed \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --quiet
         
