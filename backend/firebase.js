@@ -45,6 +45,6 @@ if (process.env.NODE_ENV !== 'production' && !process.env.GAE_ENV) {
     .then(() => console.log('🔥 Connexion Firestore OK'))
     .catch(err => console.warn('⚠️ Test connexion Firestore:', err.message));
 }
-
+//
 
 module.exports = { admin, db };
