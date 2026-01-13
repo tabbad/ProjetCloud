@@ -1,69 +1,43 @@
-name: Deploy Backend to AWS Elastic Beanstalk (Recommended)
-
+name: Deploy Backend to Google Cloud Run
 
 on:
   push:
     branches: [ main, master ]
     paths:
       - 'backend/**'
-      - '.ebextensions/**'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      REGION: ${{ secrets.CLOUD_RUN_REGION }}
+      SERVICE: ${{ secrets.CLOUD_RUN_SERVICE }}
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        
-    - name: Create deployment package
-      run: |
-        # Créer un dossier de déploiement
-        mkdir eb-deploy
-        
-        # Copier le contenu du backend
-        cp -r backend/* eb-deploy/
-        
-        # Copier les configurations Elastic Beanstalk
-        if [ -d ".ebextensions" ]; then
-          cp -r .ebextensions eb-deploy/
-        fi
-        
-        # Installer les dépendances de production
-        cd eb-deploy
-        npm install --only=production
-        
-        # Créer le package ZIP
-        zip -r ../backend-deployment.zip . -x "*.git*" "node_modules/.cache/*" "*.log"
-        cd ..
-        
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
-        
-    - name: Deploy to Elastic Beanstalk
-      uses: einaregilsson/beanstalk-deploy@v22
-      with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: ${{ secrets.EB_APPLICATION_NAME }}
-        environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
-        region: ${{ secrets.AWS_REGION }}
-        version_label: "v${{ github.run_number }}-${{ github.sha }}"
-        deployment_package: backend-deployment.zip
-        wait_for_environment_recovery: 300
-        
-    - name: Cleanup
-      run: |
-        rm -rf eb-deploy
-        rm -f backend-deployment.zip
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Deploy backend to Cloud Run
+        run: |
+          gcloud run deploy "$SERVICE" \
+            --source ./backend \
+            --region "$REGION" \
+            --platform managed \
+            --allow-unauthenticated
         
