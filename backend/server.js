@@ -12,39 +12,36 @@ const PORT = process.env.PORT || 8080; // Elastic Beanstalk utilise le port 8080
 
 
 // Configuration CORS pour la production et le développement
+const allowedOrigins = [
+  // Frontend App Engine
+  'https://projetcloud-476413.ey.r.appspot.com',
+  'https://projetcloud-476413.appspot.com',
+  // Backend Cloud Run (utile pour certains outils)
+  'https://backend-api-349217030551.europe-west1.run.app',
+  // Dev local
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:8080'
+];
+
 const corsOptions = {
-  origin: function (origin, callback) {
+  origin(origin, callback) {
     // Permettre les requêtes sans origin (comme Postman, mobile apps, etc.)
-    if (!origin) return callback(null, true);
-
-    const allowedOrigins = [
-      // Frontend App Engine
-      'https://projetcloud-476413.ey.r.appspot.com',
-      'https://projetcloud-476413.appspot.com',
-      // Backend Cloud Run (utile pour certains outils)
-      'https://backend-api-349217030551.europe-west1.run.app',
-      // Dev local
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:8080'
-    ];
-     
-
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked for origin:', origin);
-      callback(new Error('Not allowed by CORS'));
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
+    console.log('CORS blocked for origin:', origin);
+    return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
-  optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 };
 
 // Middleware
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 // Middleware de debug pour voir les requêtes

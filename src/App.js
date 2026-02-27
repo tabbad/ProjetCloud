@@ -318,7 +318,6 @@ function App() {
                         Créé: {new Date(todo.createdAt).toLocaleString()}
                       </div>
                     </div>
-                    
                     <div style={{ display: 'flex', gap: '10px' }}>
                       <button
                         onClick={() => toggleTodo(todo.id, todo.completed)}
