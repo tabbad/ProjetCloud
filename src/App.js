@@ -101,33 +101,6 @@ function App() {
     }
   };
 
-  
-  // Marquer un TODO comme terminé/non terminé
-  const TestS3 = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await fetch(`${API_URL}/files`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      //const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-      
-      fetchTodos(); // Rafraîchir les TODOs
-    } catch (err) {
-      setError(`Erreur mise à jour: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
   // Supprimer un TODO
   const deleteTodo = async (id) => {
     setLoading(true);
@@ -152,18 +125,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <button
-            onClick={() => TestS3()}
-            style={{
-              padding: '5px 10px',
-              fontSize: '12px',
-              backgroundColor:  '#4caf50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '3px',
-              cursor: 'pointer'
-            }}
-          >TEST</button>
         <h1>Todo App avec Firestore</h1>
         
         {/* Section Hello */}
