@@ -58,24 +58,8 @@ app.get('/hello', (req, res) => {
   });
 });
 
-// Route de base
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Bienvenue sur l\'API Backend avec Firestore',
-    version: '1.0.0',
-    endpoints: ['/hello', '/todos', '/todos/:id', '/test-firebase', '/health']
-  });
-});
 
-// Route de health check pour Elastic Beanstalk
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'UP',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development'
-  });
-});
+
 
 // Route de test Firebase
 app.get('/test-firebase', async (req, res) => {

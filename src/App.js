@@ -127,38 +127,6 @@ function App() {
       <header className="App-header">
         <h1>Todo App avec Firestore</h1>
         
-        {/* Section Hello */}
-        <div style={{ margin: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '10px' }}>
-          <h2>Test Route Hello</h2>
-          <button 
-            onClick={callHelloRoute}
-            disabled={loading}
-            style={{
-              padding: '10px 20px',
-              fontSize: '16px',
-              backgroundColor: '#61dafb',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              margin: '10px'
-            }}
-          >
-            {loading ? 'Chargement...' : 'Appeler /hello'}
-          </button>
-
-          {message && (
-            <div style={{ 
-              backgroundColor: '#d4edda', 
-              color: '#155724', 
-              padding: '10px', 
-              borderRadius: '5px',
-              margin: '10px'
-            }}>
-              <strong>Réponse:</strong> {message}
-            </div>
-          )}
-        </div>
-
         {/* Section TODO Firestore */}
         <div style={{ margin: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '10px' }}>
           <h2>Gestionnaire de TODOs - Firestore</h2>
@@ -183,7 +151,7 @@ function App() {
           </div>
 
           {/* Formulaire d'ajout */}
-          <div style={{ margin: '20px 0', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '5px' }}>
+          <div style={{ margin: '20px 0', padding: '15px',  borderRadius: '5px' }}>
             <h3>Ajouter un TODO</h3>
             <div style={{ margin: '10px 0' }}>
               <input
