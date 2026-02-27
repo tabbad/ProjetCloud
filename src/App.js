@@ -2,7 +2,6 @@ import './App.css';
 import { useState } from 'react';
 
 function App() {
-  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [todos, setTodos] = useState([]);
@@ -13,22 +12,7 @@ function App() {
     ? 'https://backend-api-349217030551.europe-west1.run.app'
     : 'http://localhost:8080';
 
-  const callHelloRoute = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await fetch(`${API_URL}/hello`);
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-      const data = await response.json();
-      setMessage(data.message);
-    } catch (err) {
-      setError(`Erreur: ${err.message}. Note: Mixed Content Error peut nécessiter HTTPS sur le backend.`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   // Lire les TODOs Firestore
   const fetchTodos = async () => {
