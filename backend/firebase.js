@@ -8,7 +8,7 @@ if (!admin.apps.length) {
     if (process.env.NODE_ENV === 'production' || process.env.GAE_ENV) {
       // Production : Google App Engine avec service account par défaut
       app = admin.initializeApp({
-        projectId: "projetcloudfirebase-777ce",
+        projectId: "projetcloud-476413",
         // Explicitement spécifier le service account pour App Engine
         credential: admin.credential.applicationDefault()
       });
@@ -16,7 +16,7 @@ if (!admin.apps.length) {
     } else {
       // Développement : utilise les Application Default Credentials
       app = admin.initializeApp({
-        projectId: "projetcloudfirebase-777ce"
+        projectId: "projetcloud-476413"
       });
       console.log('✅ Firebase initialisé en développement (ADC)');
     }
