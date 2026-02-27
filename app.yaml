@@ -13,38 +13,3 @@ handlers:
     static_files: build/index.html
     upload: build/index.html
 
-
-
-
-
-# runtime: nodejs20
-# env: standard
-
-# # Configuration pour le service frontend
-# service: default
-
-# # Script de build et de démarrage
-# env_variables:
-#   NODE_ENV: production
-
-# # Handlers pour servir l'application React
-# handlers:
-#   # Servir les fichiers statiques
-#   - url: /static
-#     static_dir: build/static
-
-#   # Servir les assets
-#   - url: /(.*\.(js|css|png|jpg|jpeg|gif|ico|svg|json|txt|woff2?|map))$
-#     static_files: build/\1
-#     upload: build/.*\.(js|css|png|jpg|jpeg|gif|ico|svg|json|txt|woff2?|map)$
-
-#   # Servir les fichiers spéciaux
-#   - url: /(favicon\.ico|manifest\.json|robots\.txt)$
-#     static_files: build/\1
-#     upload: build/(favicon\.ico|manifest\.json|robots\.txt)$
-
-#   # Toutes les autres routes renvoient vers index.html (pour React Router)
-#   - url: /.*
-#     static_files: build/index.html
-#     upload: build/index.html
-
