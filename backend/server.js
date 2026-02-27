@@ -25,14 +25,8 @@ const allowedOrigins = [
 ];
 
 const corsOptions = {
-  origin(origin, callback) {
-    // Permettre les requêtes sans origin (comme Postman, mobile apps, etc.)
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    console.log('CORS blocked for origin:', origin);
-    return callback(new Error('Not allowed by CORS'));
-  },
+  // Autoriser toutes les origines (à restreindre ensuite si besoin)
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
