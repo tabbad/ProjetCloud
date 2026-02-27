@@ -20,13 +20,18 @@ const allowedOrigins = [
   'https://backend-api-349217030551.europe-west1.run.app',
   // Dev local
   'http://localhost:3000',
-  'http://localhost:3001',
   'http://localhost:8080'
 ];
 
 const corsOptions = {
-  // Autoriser toutes les origines (à restreindre ensuite si besoin)
-  origin: true,
+  origin(origin, callback) {
+    // Permettre les requêtes sans origin (comme Postman, mobile apps, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    console.log('CORS blocked for origin:', origin);
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -44,55 +49,55 @@ app.use((req, res, next) => {
   next();
 });
 
-// Route de test S3
-app.get('/test-s3', async (req, res) => {
-  try {
-    const result = await s3Service.testConnection();
-    res.json({
-      ...result,
-      bucket: process.env.AWS_BUCKET_NAME,
-      region: process.env.AWS_REGION,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Erreur test S3:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-});
+// // Route de test S3
+// app.get('/test-s3', async (req, res) => {
+//   try {
+//     const result = await s3Service.testConnection();
+//     res.json({
+//       ...result,
+//       bucket: process.env.AWS_BUCKET_NAME,
+//       region: process.env.AWS_REGION,
+//       timestamp: new Date().toISOString()
+//     });
+//   } catch (error) {
+//     console.error('Erreur test S3:', error);
+//     res.status(500).json({
+//       success: false,
+//       error: error.message,
+//       timestamp: new Date().toISOString()
+//     });
+//   }
+// });
 
-// Routes S3
-// GET - Lister les fichiers
-app.get('/files', async (req, res) => {
-  try {
-    const { prefix } = req.query;
-    const result = await s3Service.listFiles(prefix);
+// // Routes S3
+// // GET - Lister les fichiers
+// app.get('/files', async (req, res) => {
+//   try {
+//     const { prefix } = req.query;
+//     const result = await s3Service.listFiles(prefix);
     
-    const files = result.Contents?.map(file => ({
-      key: file.Key,
-      size: file.Size,
-      lastModified: file.LastModified,
-      etag: file.ETag
-    })) || [];
+//     const files = result.Contents?.map(file => ({
+//       key: file.Key,
+//       size: file.Size,
+//       lastModified: file.LastModified,
+//       etag: file.ETag
+//     })) || [];
 
-    res.json({
-      success: true,
-      data: files,
-      count: files.length,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Erreur S3 GET files:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-});
+//     res.json({
+//       success: true,
+//       data: files,
+//       count: files.length,
+//       timestamp: new Date().toISOString()
+//     });
+//   } catch (error) {
+//     console.error('Erreur S3 GET files:', error);
+//     res.status(500).json({
+//       success: false,
+//       error: error.message,
+//       timestamp: new Date().toISOString()
+//     });
+//   }
+// });
 
 // POST - Upload un fichièer
 // app.post('/upload', upload.single('file'), async (req, res) => {
