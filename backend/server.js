@@ -5,7 +5,6 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const cors = require('cors');
 const { db } = require('./firebase');
-const s3Service = require('./s3service');
 
 const app = express();
 const PORT = process.env.PORT || 8080; // Elastic Beanstalk utilise le port 8080 par défaut
@@ -49,91 +48,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// // Route de test S3
-// app.get('/test-s3', async (req, res) => {
-//   try {
-//     const result = await s3Service.testConnection();
-//     res.json({
-//       ...result,
-//       bucket: process.env.AWS_BUCKET_NAME,
-//       region: process.env.AWS_REGION,
-//       timestamp: new Date().toISOString()
-//     });
-//   } catch (error) {
-//     console.error('Erreur test S3:', error);
-//     res.status(500).json({
-//       success: false,
-//       error: error.message,
-//       timestamp: new Date().toISOString()
-//     });
-//   }
-// });
 
-// // Routes S3
-// // GET - Lister les fichiers
-// app.get('/files', async (req, res) => {
-//   try {
-//     const { prefix } = req.query;
-//     const result = await s3Service.listFiles(prefix);
-    
-//     const files = result.Contents?.map(file => ({
-//       key: file.Key,
-//       size: file.Size,
-//       lastModified: file.LastModified,
-//       etag: file.ETag
-//     })) || [];
-
-//     res.json({
-//       success: true,
-//       data: files,
-//       count: files.length,
-//       timestamp: new Date().toISOString()
-//     });
-//   } catch (error) {
-//     console.error('Erreur S3 GET files:', error);
-//     res.status(500).json({
-//       success: false,
-//       error: error.message,
-//       timestamp: new Date().toISOString()
-//     });
-//   }
-// });
-
-// POST - Upload un fichièer
-// app.post('/upload', upload.single('file'), async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({
-//         success: false,
-//         error: 'Aucun fichier fourni',
-//         timestamp: new Date().toISOString()
-//       });
-//     }
-
-//     const { originalname, buffer, mimetype } = req.file;
-//     const key = `uploads/${Date.now()}-${originalname}`;
-
-//     await s3Service.uploadFile(key, buffer, mimetype);
-
-//     res.status(201).json({
-//       success: true,
-//       data: {
-//         key,
-//         originalName: originalname,
-//         size: buffer.length,
-//         contentType: mimetype
-//       },
-//       timestamp: new Date().toISOString()
-//     });
-//   } catch (error) {
-//     console.error('Erreur S3 upload:', error);
-//     res.status(500).json({
-//       success: false,
-//       error: error.message,
-//       timestamp: new Date().toISOString()
-//     });
-//   }
-// });
 // Route /hello
 app.get('/hello', (req, res) => {
   res.json({
