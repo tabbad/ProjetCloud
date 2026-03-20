@@ -132,7 +132,6 @@ Cette commande construit l’application React puis déploie le contenu avec `gc
 ```text
 .
 ├── app.yaml                # Config de déploiement frontend
-├── Dockerfile              # (si utilisé) image de déploiement
 ├── backend/
 │   ├── app.yaml            # Config de déploiement backend
 │   ├── firebase.js         # Connexion Firebase/Firestore
@@ -146,9 +145,6 @@ Cette commande construit l’application React puis déploie le contenu avec `gc
 
 ---
 
-## 9. Améliorations possibles
-
-- Ajout d’authentification utilisateur (Firebase Auth)
-- Gestion plus avancée des statuts TODO (priorité, tags, etc.)
-- Ajout de tests end-to-end (Playwright / Cypress)
-- Pipeline CI/CD pour le déploiement automatique sur Google Cloud
+## 9. URL de l’application déployée
+frontend : https://projetcloud-476413.ey.r.appspot.com/
+backend : https://backend-api-349217030551.europe-west1.run.app/

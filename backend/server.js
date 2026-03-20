@@ -7,7 +7,7 @@ const cors = require('cors');
 const { db } = require('./firebase');
 
 const app = express();
-const PORT = process.env.PORT || 8080; // Elastic Beanstalk utilise le port 8080 par défaut
+const PORT = process.env.PORT || 8080; 
 
 
 // Configuration CORS pour la production et le développement
@@ -249,16 +249,18 @@ app.delete('/todos/:id', async (req, res) => {
   }
 });
 
-// Démarrage du serveur
-app.listen(PORT, () => {
-  console.log(`🚀 Serveur démarré sur le port ${PORT}`);
-  console.log(`📡 API disponible sur http://localhost:${PORT}`);
-  console.log(`👋 Route /hello disponible sur http://localhost:${PORT}/hello`);
-  console.log(`📝 Routes /todos disponibles sur http://localhost:${PORT}/todos`);
-  console.log(`❤️ Health check disponible sur http://localhost:${PORT}/health`);
-  console.log(`🌍 Environnement: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`⏰ Démarrage terminé à: ${new Date().toISOString()}`);
-});
+// Démarrage du serveur uniquement en exécution directe (pas pendant les tests)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+    console.log(`📡 API disponible sur http://localhost:${PORT}`);
+    console.log(`👋 Route /hello disponible sur http://localhost:${PORT}/hello`);
+    console.log(`📝 Routes /todos disponibles sur http://localhost:${PORT}/todos`);
+    console.log(`❤️ Health check disponible sur http://localhost:${PORT}/health`);
+    console.log(`🌍 Environnement: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`⏰ Démarrage terminé à: ${new Date().toISOString()}`);
+  });
+}
 
 // Gestion des erreurs non capturées
 process.on('uncaughtException', (error) => {
