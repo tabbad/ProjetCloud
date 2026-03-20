@@ -101,7 +101,7 @@ app.get('/todos', async (req, res) => {
 
     res.json({
       success: true,
-      data: todos,
+      data: "szdz",
       count: todos.length,
       timestamp: new Date().toISOString()
     });
